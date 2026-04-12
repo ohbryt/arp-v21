@@ -1,0 +1,127 @@
+{
+  "version": "18.0-ULTIMATE",
+  "disease": "sarcopenia",
+  "timestamp": "2026-04-12T22:48:00.211516",
+  "elapsed_time": 0.000244140625,
+  "candidates": [
+    {
+      "id": "LINCS_Embelin",
+      "name": "Embelin",
+      "source": "lincs",
+      "novelty": 0.5,
+      "lincs_score": 0.89,
+      "final_score": 0.6610392275809458,
+      "severity": "HIGH",
+      "risk_flags": [
+        {
+          "severity": "HIGH",
+          "mechanism": "XIAP inhibition \u2192 may ACCELERATE muscle degradation",
+          "recommendation": "AVOID for pure aging sarcopenia"
+        }
+      ]
+    },
+    {
+      "id": "LINCS_Setanaxib",
+      "name": "Setanaxib",
+      "source": "lincs",
+      "novelty": 0.5,
+      "lincs_score": 0.763,
+      "final_score": 0.6314745742600465,
+      "severity": "HIGH",
+      "risk_flags": [
+        {
+          "severity": "HIGH",
+          "mechanism": "NOX4 has PROTECTIVE role in aging muscle",
+          "recommendation": "AVOID for pure aging sarcopenia"
+        }
+      ]
+    },
+    {
+      "id": "DE_NOVO_003",
+      "name": "De Novo 3",
+      "source": "denovo",
+      "novelty": 0.9750513306305055,
+      "lincs_score": 0.0,
+      "final_score": 0.6052497790837331,
+      "severity": "NONE",
+      "risk_flags": []
+    },
+    {
+      "id": "DE_NOVO_000",
+      "name": "De Novo 0",
+      "source": "denovo",
+      "novelty": 0.9808446273131729,
+      "lincs_score": 0.0,
+      "final_score": 0.6030985503875618,
+      "severity": "NONE",
+      "risk_flags": []
+    },
+    {
+      "id": "DE_NOVO_006",
+      "name": "De Novo 6",
+      "source": "denovo",
+      "novelty": 0.9720701676351212,
+      "lincs_score": 0.0,
+      "final_score": 0.5993882805246229,
+      "severity": "NONE",
+      "risk_flags": []
+    },
+    {
+      "id": "DE_NOVO_002",
+      "name": "De Novo 2",
+      "source": "denovo",
+      "novelty": 0.9335989468403452,
+      "lincs_score": 0.0,
+      "final_score": 0.5978944563293093,
+      "severity": "NONE",
+      "risk_flags": []
+    },
+    {
+      "id": "DE_NOVO_008",
+      "name": "De Novo 8",
+      "source": "denovo",
+      "novelty": 0.9812655979083613,
+      "lincs_score": 0.0,
+      "final_score": 0.5921737697623849,
+      "severity": "NONE",
+      "risk_flags": []
+    },
+    {
+      "id": "DE_NOVO_005",
+      "name": "De Novo 5",
+      "source": "denovo",
+      "novelty": 0.9376516062645409,
+      "lincs_score": 0.0,
+      "final_score": 0.5797113096973117,
+      "severity": "NONE",
+      "risk_flags": []
+    },
+    {
+      "id": "DE_NOVO_007",
+      "name": "De Novo 7",
+      "source": "denovo",
+      "novelty": 0.9390976768936483,
+      "lincs_score": 0.0,
+      "final_score": 0.5782958550152443,
+      "severity": "NONE",
+      "risk_flags": []
+    },
+    {
+      "id": "DE_NOVO_009",
+      "name": "De Novo 9",
+      "source": "denovo",
+      "novelty": 0.9319374482978077,
+      "lincs_score": 0.0,
+      "final_score": 0.576461509591672,
+      "severity": "NONE",
+      "risk_flags": []
+    }
+  ],
+  "summary": {
+    "total_candidates": 15,
+    "lincs_candidates": 5,
+    "denovo_candidates": 10,
+    "high_risk_flags": 2,
+    "top_candidate": "LINCS_Embelin"
+  }
+}
