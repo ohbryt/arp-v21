@@ -40,7 +40,7 @@ python3 neuroprotective_plants_integration.py -d alzheimer -o test_results/
 |--------|--------|
 | AutoRun (x50) | Mock - not benchmarked |
 | Novelty Scores | Mock heuristic - not scientifically validated |
-| TF Binding Accuracy | Mock/random heuristic - not benchmarked |
+| TF Binding Accuracy | Mock deterministic heuristic - not benchmarked |
 | Linco Coverage | 51K+ profiles (external dependency) |
 | ADMET Integration | Requires API keys |
 

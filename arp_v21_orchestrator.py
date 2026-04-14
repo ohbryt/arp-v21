@@ -189,7 +189,7 @@ def run_tfbindformer(mode="mock", seed=None):
                 "binding_score": result.binding_score,
                 "confidence": result.confidence,
                 "position_scores_count": len(result.position_scores) if result.position_scores else 0,
-                "source_of_score": "random heuristic",
+                "source_of_score": "stable deterministic heuristic",
                 "warning": "Mock implementation - real model not available"
             }
     
@@ -365,7 +365,7 @@ This report shows the results of running ARP v21 research prototype.
     
     report += f"""## Important Notes
 
-1. **Mock Implementation**: All modules are running in mock mode using hash-based or random scoring.
+1. **Mock Implementation**: Modules use deterministic heuristic scoring or curated static data.
 2. **No Scientific Validation**: Results should not be used for actual research or clinical decisions.
 3. **Reproducibility**: Use `--seed` flag for reproducible results (mock mode only).
 4. **Missing Dependencies**: Some modules are not available due to missing dependencies.
