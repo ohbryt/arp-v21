@@ -29,12 +29,20 @@ import os
 import sys
 import json
 import logging
+import hashlib
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 import numpy as np
 
 logger = logging.getLogger(__name__)
+
+def _stable_hash(text: str, seed: int = 42) -> int:
+    """Generate stable hash for reproducible mock scoring"""
+    # Use SHA256 for deterministic hash
+    hash_obj = hashlib.sha256(f"{text}_{seed}".encode())
+    # Convert to integer in range 0-9999 for scoring
+    return int(hash_obj.hexdigest()[:8], 16) % 10000
 
 
 @dataclass
@@ -127,7 +135,8 @@ class LatentDiffusionIntegrator:
         cell_line: str,
         dose: float,
         time: float,
-        unperturbed_ge: np.ndarray = None
+        unperturbed_ge: np.ndarray = None,
+        seed: int = 42
     ) -> GeneExpressionProfile:
         """
         Predict drug-induced gene expression profile
@@ -149,7 +158,7 @@ class LatentDiffusionIntegrator:
         # For production, replace with actual Latent Diffusion Model
         # Current implementation uses hash-based scoring for demonstration
         # Real model should use VAE + Diffusion architecture with actual gene expression data
-        base_score = 0.7 + hash(drug_smiles) % 30 / 100
+        base_score = 0.7 + _stable_hash(drug_smiles, seed) % 30 / 100
         
         profile = GeneExpressionProfile(
             drug_id=drug_smiles[:20] if len(drug_smiles) > 20 else drug_smiles,
@@ -157,7 +166,7 @@ class LatentDiffusionIntegrator:
             dose=dose,
             time=time,
             mean_prediction=base_score,
-            variance_prediction=0.05 + (hash(drug_smiles + cell_line) % 10) / 100,
+            variance_prediction=0.05 + (_stable_hash(drug_smiles + cell_line, seed) % 10) / 100,
             metadata={
                 "model": "Latent Diffusion Model (Kim & Yoo 2026)",
                 "architecture": "VAE + Diffusion in latent space",
@@ -191,7 +200,8 @@ class LatentDiffusionIntegrator:
         self,
         drug_smiles: str,
         target_pathways: List[str],
-        cell_line: str = "MCF7"
+        cell_line: str = "MCF7",
+        seed: int = 42
     ) -> Dict[str, Any]:
         """
         Evaluate drug relevance to target pathways
@@ -210,7 +220,7 @@ class LatentDiffusionIntegrator:
             # NOTE: MOCK PATHWAY SCORING
             # For production, replace with actual pathway analysis (GSEA, Enrichr, etc.)
             # Current implementation uses hash-based scoring for demonstration
-            base_relevance = 0.5 + hash(pathway + drug_smiles) % 50 / 100
+            base_relevance = 0.5 + _stable_hash(pathway + drug_smiles, seed) % 50 / 100
             pathway_scores[pathway] = {
                 "score": base_relevance,
                 "direction": "activation" if base_relevance > 0.7 else "inhibition",

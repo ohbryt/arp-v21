@@ -58,8 +58,16 @@ def run_latent_diffusion(disease, mode="mock", seed=None):
     """Run latent diffusion module"""
     print(f"🔬 Running Latent Diffusion Module...")
     
+    if mode == "real":
+        raise NotImplementedError(
+            "Real mode not implemented. "
+            "Latent Diffusion Model requires trained model weights. "
+            "Use mode='mock' for demonstration."
+        )
+    
     if mode == "mock":
-        print("  🎭 WARNING: Running in MOCK MODE - using hash-based scoring")
+        print("  🎭 WARNING: Running in MOCK MODE - using stable hash-based scoring")
+        print("  ℹ️  Scores are deterministic with --seed flag for reproducibility")
         
         integrator = LatentDiffusionIntegrator(mode="mock")
         
@@ -76,11 +84,14 @@ def run_latent_diffusion(disease, mode="mock", seed=None):
         if seed:
             import random
             random.seed(seed)
+            import numpy as np
+            np.random.seed(seed)
         
         result = integrator.evaluate_drug_relevance(
             "CC(=O)Oc1ccc(C2CCC3C2CCC3C)c(C)c1",  # Embelin
             targets,
-            cell_line="MCF7"
+            cell_line="MCF7",
+            seed=seed
         )
         
         return {
@@ -98,6 +109,12 @@ def run_latent_diffusion(disease, mode="mock", seed=None):
 def run_neuroprotective_plants(disease, mode="mock"):
     """Run neuroprotective plants module"""
     print(f"🧪 Running Neuroprotective Plants Module...")
+    
+    if mode == "real":
+        raise NotImplementedError(
+            "Real mode not implemented for this module. "
+            "This is a curated knowledge base. Use mode='mock'."
+        )
     
     integrator = NeuroprotectivePlantIntegrator()
     
@@ -132,8 +149,16 @@ def run_tfbindformer(mode="mock", seed=None):
     """Run TFBindFormer module"""
     print(f"🧬 Running TFBindFormer Module...")
     
+    if mode == "real":
+        raise NotImplementedError(
+            "Real mode not implemented. "
+            "TFBindFormer requires ESM-2 + Foldseek model weights. "
+            "Use mode='mock' for demonstration."
+        )
+    
     if mode == "mock":
-        print("  🎭 WARNING: Running in MOCK MODE - using random values")
+        print("  🎭 WARNING: Running in MOCK MODE - using numpy random with seed")
+        print("  ℹ️  Scores are deterministic with --seed flag for reproducibility")
         
         integrator = TFBindFormerIntegration(mode="mock")
         
@@ -147,14 +172,17 @@ def run_tfbindformer(mode="mock", seed=None):
         
         result = integrator.predict_binding(
             "CC(=O)Oc1ccc(C2CCC3C2CCC3C)c(C)c1",  # Embelin
-            dna_sequence
+            dna_sequence,
+            seed=args.seed  # Pass seed to the method
         )
         
         if result:
             return {
                 "module": "tfbindformer",
                 "mode": "mock",
-                "target_count": len(result),
+                "binding_score": result.binding_score,
+                "confidence": result.confidence,
+                "position_scores_count": len(result.position_scores) if result.position_scores else 0,
                 "source_of_score": "random heuristic",
                 "warning": "Mock implementation - real model not available"
             }

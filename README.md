@@ -14,7 +14,7 @@ This is a research prototype for demonstration purposes. NOT production ready.
 | Latent Diffusion Model | Mock Only | Hash-based demo scoring |
 | TFBindFormer Integration | Partial | Random values, real model missing |
 | Neuroprotective Plants | Heuristic | Curated knowledge base (8 compounds) |
-| Full Pipeline | Missing Entry Point | No orchestrator implemented |
+| Full Pipeline | Experimental Orchestrator | Available with mock orchestration |
 | Database Integration | Not Working | API keys required |
 
 ## Usage (Experimental Demo Only)

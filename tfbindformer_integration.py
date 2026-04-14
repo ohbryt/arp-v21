@@ -131,8 +131,12 @@ class TFBindFormerIntegration:
             logger.warning(f"Could not load TFBindFormer model: {e}")
             return None
     
-    def predict_binding(self, tf_sequence: str, dna_sequence: str) -> TFBindingResult:
+    def predict_binding(self, tf_sequence: str, dna_sequence: str, seed: int = None) -> TFBindingResult:
         """Predict TF-DNA binding affinity"""
+        # Set seed for reproducibility if provided
+        if seed is not None:
+            np.random.seed(seed)
+        
         if not self._model:
             # Return mock result if model not available
             return TFBindingResult(
