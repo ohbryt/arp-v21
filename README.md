@@ -1,163 +1,73 @@
-"""
-ARP v21 - The Ultimate Unified Pipeline
+# ARP v21 - Research Prototype
 ========================================
 
-**Version**: 21.0 - ALL-IN-ONE Integration
+**Version**: 21.0 - Experimental Prototype
 **Created**: 2026-04-14
-**Status**: Production Ready
+**Status**: Research Prototype / Demo Only
 
-This pipeline integrates ALL previous ARP versions and new research:
+This is a research prototype for demonstration purposes. NOT production ready.
 
-## Inherited Components
+## Module Status
 
-### ARP v20 Full Integration
-- ✅ Types Fix Module (conflict resolution)
-- ✅ Database Integration (9 databases: ChEMBL, DrugBank, NPACT, COCONUT, etc.)
-- ✅ 3D Structure Analysis (AlphaFold/ESMFold + FlashBind)
-- ✅ ADMET Prediction (ADMETlab API integration)
+| Module | Status | Description |
+|--------|--------|-------------|
+| Latent Diffusion Model | Mock Only | Hash-based demo scoring |
+| TFBindFormer Integration | Partial | Random values, real model missing |
+| Neuroprotective Plants | Heuristic | Curated knowledge base (8 compounds) |
+| Full Pipeline | Missing Entry Point | No orchestrator implemented |
+| Database Integration | Not Working | API keys required |
 
-### ARP-Next v2.0
-- ✅ LaMGen Integration (Natural Language Generation)
-- ✅ LINCS L1000 Real Data (51K+ profiles)
-- ✅ Literature Risk Assessment
-- ✅ Context-Dependent Treatment
+## Usage (Experimental Demo Only)
 
-### ARP v19 Enhanced
-- ✅ Multi-disease Pipeline (Sarcopenia, MASLD, Diabetic Cardiomyopathy)
-- ✅ Custom Report Generator (Korean/English)
-- ✅ Optimized Processing (Caching, Parallel, Lazy Loading)
+```bash
+# Mock mode demonstration
+python3 latent_diffusion_integration.py -d alzheimer -o test_results/
 
-### ARP v18 Production
-- ✅ Drug Pipeline Integration (All modules)
-- ✅ TFBindFormer Integration
-- ✅ Hyperbrowser Medical Research
+# Neuroprotective plants demo
+python3 neuroprotective_plants_integration.py -d alzheimer -o test_results/
 
-### ARP v17
-- ✅ GPDRP Enhanced GNN
-- ✅ AlphaSAXS + scPBPK Integration
-
-### ARP v14
-- ✅ Token-Mol Integration (Atom-in-SMILES tokenization)
-- ✅ TF Atlas Re-analysis
-
-### ARP v13
-- ✅ NIIA Integration (Neural Intelligence)
-- ✅ Hyperbrowser Medical Literature Research
-- ✅ CellFluxRL-style RL Refinement
-
-### ARP v12
-- ✅ FlashBind Structure-based Virtual Screening
-- ✅ CellFlux RL 7D Multi-reward
-
-### ARP v11
-- ✅ FlashBind v2 Integration (MLS 2025)
-- ✅ Structure screening phase
-
-### ARP v10
-- ✅ Natural Product Database Integration
-- ✅ Hybrid Search (BM25 + HyDE + IRCoT)
-- ✅ Pharmacophore Match
-- ✅ ADMET Predictor
-
-## NEW INTEGRATIONS (v21)
-
-### 1. Latent Diffusion Model (Kim & Yoo 2026)
-- **Source**: Bioinformatics, DOI: 10.1093/bioinformatics/xxxxx
-- **Performance**: Pearson 0.870, R² 0.739
-- **Architecture**: VAE + Diffusion in latent space
-- **Feature**: Mean + Variance prediction (vs mean-only)
-- **Integration**: Drug-induced gene expression prediction
-
-### 2. Neuroprotective Plants Integration (Kim et al. 2026)
-- **Source**: Journal of Molecular Modeling, DOI: 10.1007/s00894-026-06711-w
-- **Targets**: GSK3β, STAT3, MAOB, ESR1, PTGS2
-- **Lead**: Rosmariquinone (Rosemary-derived)
-- **Methods**: Swiss ADME, ProTox III, AutoDock Vina, Desmond MD
-- **Integration**: Natural product screening for Alzheimer's
-
-## DISEASE COVERAGE
-
-| Disease | Status | Coverage |
-|---------|--------|----------|
-| Sarcopenia | ✅ Complete | Full pipeline |
-| MASLD | ✅ Complete | Full pipeline |
-| Diabetic Cardiomyopathy | ✅ Complete | HFrEF/HFpEF/HFmrEF |
-| Alzheimer's | ✅ NEW | Neuroprotective targets |
-| Obesity | ✅ Complete | Drug pipeline |
-
-## PIPELINE ARCHITECTURE
-
-```
-ARP v21 Main Pipeline
-├── Phase 1: Literature Collection & Analysis
-├── Phase 2: Target Identification (TFBindFormer + LLM)
-├── Phase 3: Virtual Hits (Library + De Novo)
-├── Phase 4: Structure Analysis (FlashBind + AlphaFold)
-├── Phase 5: ADMET Prediction (ADMETlab + Swiss ADME)
-├── Phase 6: Bioactivity Scoring (CellFlux RL)
-├── Phase 7: Gene Expression Prediction (Latent Diffusion)
-├── Phase 8: Multi-disease Analysis
-├── Phase 9: Neuroprotective Screening (New)
-└── Phase 10: Final Report Generation
+# Note: This is a research prototype. Results are not validated.
+# Real functionality requires external model APIs and databases.
 ```
 
-## PERFORMANCE METRICS
+## Performance
 
-| Metric | Score | Status |
-|--------|-------|--------|
-| AutoRun (x50) | Mean: 0.7566, Std: 0.0101 | ✅ Stable |
-| Novelty Scores | DE_NOVO_009: 0.98 | ✅ True Novelty |
-| TF Binding Accuracy | 3 targets > 0.6 | ✅ Validated |
-| Linco Coverage | 51K+ profiles | ✅ Comprehensive |
-| ADMET Integration | 9 databases | ✅ Complete |
+| Metric | Status |
+|--------|--------|
+| AutoRun (x50) | Not tested - mock implementation |
+| Novelty Scores | Mock - hash-based |
+| TF Binding Accuracy | Partial - random values |
+| Linco Coverage | 51K+ profiles (external dependency) |
+| ADMET Integration | Requires API keys |
 
-## USAGE
+⚠️ **WARNING**: All performance metrics are from mock implementations.
+Real benchmarks require model APIs and database connections.
 
-```python
-# Simple run
-python3 arp_v21_orchestrator.py --topic "sarcopenia" --disease sarcopenia
+## Integration Checklist
 
-# Multi-disease analysis
-python3 arp_v21_orchestrator.py --topic "diabetic cardiomyopathy" --disease dc --modalities 3
+- ❌ Drug Pipeline (requires API keys)
+- ❌ TFBindFormer (real model missing)
+- ❌ Latent Diffusion Model (mock only)
+- ❌ Hyperbrowser Medical Research (API required)
+- ❌ NIIA Memory System (external dependency)
+- ❌ FlashBind v2 (model files missing)
+- ❌ LINCS L1000 (network access required)
+- ✅ Neuroprotective Plants (curated data)
+- ❌ Real ADMET Integration (API keys needed)
 
-# Neuroprotective focus
-python3 arp_v21_orchestrator.py --topic "alzheimer's" --disease alzheimer --neuroprotective
-
-# Full pipeline with all modules
-python3 arp_v21_orchestrator.py --topic "obesity" --full_pipeline
-```
-
-## INTEGRATION CHECKLIST
-
-- ✅ Drug Pipeline (all modules)
-- ✅ TFBindFormer (TF binding prediction)
-- ✅ Latent Diffusion Model (Kim & Yoo 2026)
-- ✅ Neuroprotective Plants (Kim et al. 2026)
-- ✅ NIIA Memory System
-- ✅ Hyperbrowser Medical Research
-- ✅ FlashBind v2
-- ✅ LINCS L1000
-- ✅ AlphaSAXS + scPBPK
-- ✅ GPDRP Enhanced GNN
-- ✅ Token-Mol Integration
-- ✅ LaMGen Generation
-- ✅ CellFlux RL 7D
-- ✅ Multi-disease Coverage
-- ✅ Korean/English Reports
-- ✅ Custom Report Generator
-
-## REFERENCES
+## References
 
 1. Kim & Yoo (2026) - Latent Diffusion for Drug-Induced Gene Expression
+   - Note: DOI placeholder - actual implementation not connected
+   
 2. Kim et al. (2026) - Neuroprotective Medicinal Plants
-3. Wang et al. (2025) - Token-Mol (Nature Communications)
-4. Chen et al. (2024) - TFBindFormer
-5. Zhang et al. (2024) - FlashBind v2 (MLS 2025)
-6. Arp v20 - Full Drug Pipeline Integration
+   - Note: Curated knowledge base, real screening pending
+
+3. Chen et al. (2024) - TFBindFormer
+   - Note: Model files not available, using mock values
 
 ---
 
-*Generated by ARP v21 - The Ultimate Unified Pipeline*
+*Generated by ARP v21 - Research Prototype*
 *Created: 2026-04-14*
-*Status: Production Ready*
-"""
+*Status: Experimental Demo Only - Not Production Ready*

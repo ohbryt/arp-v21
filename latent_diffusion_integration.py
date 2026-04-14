@@ -88,13 +88,29 @@ class LatentDiffusionIntegrator:
     - R² score: 0.739 ± 0.001
     """
     
-    def __init__(self, model_path: str = None, output_dir: str = "diffusion_results"):
-        self.model_path = model_path or "/Users/ocm/.openclaw/workspace/TFBindFormer"
+    def __init__(self, model_path: str = None, output_dir: str = "diffusion_results", mode: str = "mock"):
+        """
+        Initialize Latent Diffusion Model integration
+        
+        Args:
+            model_path: Path to model files (not implemented)
+            output_dir: Output directory for results
+            mode: "mock" for demo, "real" for production (not implemented)
+        """
+        self.mode = mode
+        self.is_mock = (mode == "mock")
+        self.model_path = model_path or os.environ.get("ARP_DIFFUSION_PATH")
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
         self.available = self._check_availability()
         self._model = None
+        
+        if self.is_mock:
+            print("🎭 WARNING: Running in MOCK MODE - using hash-based scoring")
+            print("   Real model implementation not available")
+        else:
+            print("🚫 Real mode not implemented yet")
         
     def _check_availability(self) -> bool:
         """Check if diffusion model is available"""
@@ -129,6 +145,10 @@ class LatentDiffusionIntegrator:
         # For demo, generate mock prediction with uncertainty
         # Actual implementation would use trained model
         
+        # NOTE: THIS IS A MOCK IMPLEMENTATION
+        # For production, replace with actual Latent Diffusion Model
+        # Current implementation uses hash-based scoring for demonstration
+        # Real model should use VAE + Diffusion architecture with actual gene expression data
         base_score = 0.7 + hash(drug_smiles) % 30 / 100
         
         profile = GeneExpressionProfile(
@@ -187,6 +207,9 @@ class LatentDiffusionIntegrator:
         for pathway in target_pathways:
             # Mock pathway relevance calculation
             # Actual implementation would use GSEA or similar
+            # NOTE: MOCK PATHWAY SCORING
+            # For production, replace with actual pathway analysis (GSEA, Enrichr, etc.)
+            # Current implementation uses hash-based scoring for demonstration
             base_relevance = 0.5 + hash(pathway + drug_smiles) % 50 / 100
             pathway_scores[pathway] = {
                 "score": base_relevance,

@@ -65,13 +65,29 @@ class TFBindFormerIntegration:
     Enables TF binding prediction for drug target discovery
     """
     
-    def __init__(self, tfbindformer_path: str = None, output_dir: str = "tf_results"):
-        self.tfbindformer_path = tfbindformer_path or "/Users/ocm/.openclaw/workspace/TFBindFormer"
+    def __init__(self, tfbindformer_path: str = None, output_dir: str = "tf_results", mode: str = "mock"):
+        """
+        Initialize TFBindFormer integration
+        
+        Args:
+            tfbindformer_path: Path to TFBindFormer model files
+            output_dir: Output directory for results
+            mode: "mock" for demo, "real" for production (not implemented)
+        """
+        self.mode = mode
+        self.is_mock = (mode == "mock")
+        self.tfbindformer_path = tfbindformer_path or os.environ.get("ARP_TFBINDFORMER_PATH")
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
         self.available = self._check_availability()
         self._model = None
+        
+        if self.is_mock:
+            print("🎭 WARNING: Running in MOCK MODE - using random values")
+            print("   Real TFBindFormer model not available")
+        else:
+            print("🚫 Real mode not implemented yet")
         
     def _check_availability(self) -> bool:
         """Check if TFBindFormer is available"""
@@ -122,8 +138,8 @@ class TFBindFormerIntegration:
             return TFBindingResult(
                 tf_name=tf_sequence[:20],
                 dna_region=dna_sequence[:20],
-                binding_score=0.75 + np.random.random() * 0.2,
-                confidence=0.8 + np.random.random() * 0.15,
+                binding_score=0.75 + np.random.random() * 0.2,  # NOTE: MOCK SCORE
+                confidence=0.8 + np.random.random() * 0.15,  # NOTE: MOCK CONFIDENCE
                 position_scores=[0.7 + np.random.random() * 0.3 for _ in range(10)]
             )
         
