@@ -298,8 +298,8 @@ class NeuroprotectivePlantIntegrator:
         
         report = f"""# Neuroprotective Medicinal Plants Report
 
-**Disease**: Alzheimer's Disease (AD)
-**Generated**: ARP v20 + Kim et al. (2026) Integration
+**Disease Context**: {disease}
+**Generated**: ARP v21 + Kim et al. (2026) Integration
 **Source**: Journal of Molecular Modeling, DOI: 10.1007/s00894-026-06711-w
 
 ---
@@ -326,7 +326,7 @@ class NeuroprotectivePlantIntegrator:
         
         report += f"""
 
-## 3. Multi-Target Compounds (≥2 AD targets)
+## 3. Multi-Target Compounds (≥2 configured targets)
 
 | Compound | Targets | Multi-target Score |
 |----------|---------|-------------------|
