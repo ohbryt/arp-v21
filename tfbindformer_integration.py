@@ -109,6 +109,14 @@ class TFBindFormerIntegration:
         
     def _check_availability(self) -> bool:
         """Check if TFBindFormer is available"""
+        # Skip check in mock mode
+        if self.is_mock:
+            return False
+        
+        if not self.tfbindformer_path:
+            logger.warning("TFBindFormer path not set")
+            return False
+        
         if not os.path.exists(self.tfbindformer_path):
             logger.warning(f"TFBindFormer not found at {self.tfbindformer_path}")
             return False

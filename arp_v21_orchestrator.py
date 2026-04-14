@@ -79,7 +79,7 @@ def run_latent_diffusion(disease, mode="mock", seed=None):
     
     if mode == "mock":
         print("  🎭 WARNING: Running in MOCK MODE - using stable hash-based scoring")
-        print("  ℹ️  Scores are deterministic with --seed flag for reproducibility")
+        print("  ℹ️  Scores are deterministic in mock mode; --seed retained for future compatibility")
         
         integrator = LatentDiffusionIntegrator(mode="mock")
         
@@ -165,8 +165,8 @@ def run_tfbindformer(mode="mock", seed=None):
         )
     
     if mode == "mock":
-        print("  🎭 WARNING: Running in MOCK MODE - using numpy random with seed")
-        print("  ℹ️  Scores are deterministic with --seed flag for reproducibility")
+        print("  🎭 WARNING: Running in MOCK MODE - using stable deterministic heuristic scoring")
+        print("  ℹ️  Scores are deterministic in mock mode; --seed retained for future compatibility")
         
         integrator = TFBindFormerIntegration(mode="mock")
         

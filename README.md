@@ -12,7 +12,7 @@ This is a research prototype for demonstration purposes. NOT production ready.
 | Module | Status | Description |
 |--------|--------|-------------|
 | Latent Diffusion Model | Mock Only | Stable hash-based demo scoring |
-| TFBindFormer Integration | Mock Only | Seeded random, real model missing |
+| TFBindFormer Integration | Mock Only | Stable deterministic heuristic, real model missing |
 | Neuroprotective Plants | Heuristic | Curated knowledge base (8 compounds) |
 | Full Pipeline | Experimental Orchestrator | Available with mock orchestration |
 | Database Integration | Not Working | API keys required |
