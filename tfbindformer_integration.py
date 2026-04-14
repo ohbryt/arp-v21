@@ -102,7 +102,7 @@ class TFBindFormerIntegration:
         self._model = None
         
         if self.is_mock:
-            print("🎭 WARNING: Running in MOCK MODE - using deterministic heuristic scoring")
+            print("🎭 WARNING: Running in MOCK MODE - using stable deterministic heuristic values")
             print("   Real TFBindFormer model not available")
         else:
             print("🚫 Real mode not implemented yet")
@@ -208,7 +208,7 @@ class TFBindFormerIntegration:
                 "SREBF1": {"family": "bHLH", "binding_sites": 400, "disease_relevance": 0.95},
                 "PPARA": {"family": "NR", "binding_sites": 350, "disease_relevance": 0.90},
                 "XBP1": {"family": "bZIP", "binding_sites": 180, "disease_relevance": 0.88},
-                "NLRC3": {"family": "NLR", "binding_sites": 50, "disease_relevance": 0.75},
+                "NLRP3": {"family": "NLR", "binding_sites": 50, "disease_relevance": 0.75},
             },
             "diabetic_cardiomyopathy": {
                 "NFKB1": {"family": "REL", "binding_sites": 500, "disease_relevance": 0.92},
@@ -218,7 +218,7 @@ class TFBindFormerIntegration:
             "vascular_calcification": {
                 "RUNX2": {"family": "RUNT", "binding_sites": 250, "disease_relevance": 0.95},
                 "SP7": {"family": "RUNT", "binding_sites": 150, "disease_relevance": 0.90},
-                "Sox9": {"family": "HMG", "binding_sites": 180, "disease_relevance": 0.85},
+                "SOX9": {"family": "HMG", "binding_sites": 180, "disease_relevance": 0.85},
             }
         }
         
@@ -364,18 +364,23 @@ TFBindFormer Analysis Pipeline:
         return str(output_file)
 
 
-def integrate_tf_binding(disease: str, target_genes: List[str] = None) -> List[TFTarget]:
+def integrate_tf_binding(
+    disease: str,
+    target_genes: List[str] = None,
+    output_dir: str = "tf_results",
+) -> List[TFTarget]:
     """
     Main integration function for ARP v20
     
     Args:
         disease: Disease name
         target_genes: Optional list of specific genes
+        output_dir: Output directory for results
     
     Returns:
         List of TFTarget with druggability scores
     """
-    integrator = TFBindFormerIntegration()
+    integrator = TFBindFormerIntegration(output_dir=output_dir)
     
     # Default target genes per disease
     default_genes = {
@@ -406,7 +411,7 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    targets = integrate_tf_binding(args.disease, args.genes)
+    targets = integrate_tf_binding(args.disease, args.genes, output_dir=args.output)
     
     print(f"\nFound {len(targets)} TF targets for {args.disease}")
     for i, t in enumerate(targets[:5], 1):

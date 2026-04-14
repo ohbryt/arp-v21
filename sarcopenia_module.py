@@ -280,6 +280,7 @@ class SarcopeniaCompound:
     data_mode: str = "heuristic"
     source_reference: str = "Sarcopenia literature 2024"
     warning: str = None
+    unmapped_targets: List[str] = None
 
     def to_dict(self) -> Dict:
         return {
@@ -290,6 +291,7 @@ class SarcopeniaCompound:
             "smiles": self.smiles,
             "smiles_status": self.smiles_status,
             "targets": self.targets,
+            "unmapped_targets": self.unmapped_targets or [],
             "mechanism": self.mechanism,
             "clinical_evidence": self.clinical_evidence,
             "admet_score": self.admet_score,
@@ -371,16 +373,21 @@ class SarcopeniaModule:
         # Calculate target overlap score
         matching_targets = 0
         total_relevance = 0.0
+        unmapped_targets = []
         
         for target_gene in compound.targets:
             if target_gene in self.targets:
                 matching_targets += 1
                 target_info = self.targets[target_gene]
                 total_relevance += target_info["disease_relevance"] * target_info["druggability"]
+            else:
+                unmapped_targets.append(target_gene)
         
-        # Target score based on overlap
-        if matching_targets > 0:
-            compound.target_score = total_relevance / matching_targets
+        compound.unmapped_targets = unmapped_targets
+        
+        # Target score based on full target list (not just mapped)
+        if len(compound.targets) > 0:
+            compound.target_score = total_relevance / max(len(compound.targets), 1)
         else:
             compound.target_score = 0.0
         
@@ -393,11 +400,10 @@ class SarcopeniaModule:
         # Evidence score based on clinical stage
         evidence_map = {
             "Phase III": 0.95,
-            "Phase II/III": 0.90,
-            "Phase II": 0.80,
             "Phase II/III": 0.85,
-            "Preclinical": 0.50,
+            "Phase II": 0.80,
             "Clinical": 0.70,
+            "Preclinical": 0.50,
         }
         evidence_score = evidence_map.get(compound.clinical_evidence.split(" - ")[0], 0.40)
         
@@ -472,7 +478,10 @@ Scores are deterministic heuristics using SHA256-based stable scoring.
             if len(compound.targets) > 3:
                 targets_str += "..."
             warning_indicator = " ⚠️" if compound.warning else ""
-            report += f"| {i} | **{compound.name}**{warning_indicator} | {compound.compound_type} | {targets_str} | {compound.clinical_evidence} | {compound.admet_score:.2f} | {compound.overall_score:.3f} |\n"
+            unmapped_note = ""
+            if compound.unmapped_targets:
+                unmapped_note = f" [unmapped: {', '.join(compound.unmapped_targets)}]"
+            report += f"| {i} | **{compound.name}**{warning_indicator} | {compound.compound_type} | {targets_str}{unmapped_note} | {compound.clinical_evidence} | {compound.admet_score:.2f} | {compound.overall_score:.3f} |\n"
         
         report += f"""
 ## Clinical Evidence Summary
