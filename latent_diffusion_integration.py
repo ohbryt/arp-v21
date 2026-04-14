@@ -77,8 +77,9 @@ class GeneExpressionProfile:
     def __post_init__(self):
         if self.metadata is None:
             self.metadata = {}
-        if self.expression_vector is not None:
-            self.uncertainty = np.sqrt(self.variance_prediction)
+        # Always calculate uncertainty from variance_prediction
+        # This ensures model_confidence reflects variance even when expression_vector is None
+        self.uncertainty = np.sqrt(self.variance_prediction)
 
 
 @dataclass
