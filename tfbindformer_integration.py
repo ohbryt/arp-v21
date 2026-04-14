@@ -2,6 +2,11 @@
 TFBindFormer Integration for ARP v20
 ====================================
 
+⚠️  MOCK IMPLEMENTATION - NO ACTUAL TFBINDFORMER INFERENCE PERFORMED
+
+This module provides mock/heuristic TF binding predictions for demonstration.
+No real ESM-2 or Foldseek model inference is performed.
+
 Transcription Factor-DNA Binding Prediction for Drug Target Discovery
 
 TFBindFormer: https://github.com/BioinfoMachineLearning/TFBindFormer
@@ -11,12 +16,25 @@ import os
 import sys
 import json
 import logging
+import hashlib
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 import numpy as np
 
 logger = logging.getLogger(__name__)
+
+
+def stable_score(key: str, min_val: float, max_val: float) -> float:
+    """
+    Generate stable deterministic score in range [min_val, max_val)
+    
+    Uses SHA256 for environment-independent deterministic output.
+    """
+    digest = hashlib.sha256(key.encode("utf-8")).hexdigest()
+    # Normalize to [0, 1) range
+    value = int(digest[:8], 16) / 0xFFFFFFFF
+    return min_val + (max_val - min_val) * value
 
 
 @dataclass
@@ -134,34 +152,25 @@ class TFBindFormerIntegration:
     def predict_binding(self, tf_sequence: str, dna_sequence: str, seed: int = None) -> TFBindingResult:
         """Predict TF-DNA binding affinity"""
         # Set seed for reproducibility if provided
-        if seed is not None:
-            np.random.seed(seed)
-        
         if not self._model:
-            # Return mock result if model not available
+            # Return mock result using deterministic scoring
+            # No seed needed - SHA256-based stable_score is environment-independent
             return TFBindingResult(
                 tf_name=tf_sequence[:20],
                 dna_region=dna_sequence[:20],
-                binding_score=0.75 + np.random.random() * 0.2,  # NOTE: MOCK SCORE
-                confidence=0.8 + np.random.random() * 0.15,  # NOTE: MOCK CONFIDENCE
-                position_scores=[0.7 + np.random.random() * 0.3 for _ in range(10)]
+                binding_score=stable_score(f"binding:{tf_sequence}:{dna_sequence}", 0.75, 0.95),
+                confidence=stable_score(f"confidence:{tf_sequence}:{dna_sequence}", 0.80, 0.95),
+                position_scores=[
+                    stable_score(f"pos:{i}:{tf_sequence}:{dna_sequence}", 0.70, 1.00)
+                    for i in range(10)
+                ]
             )
         
-        try:
-            # Run actual prediction
-            with torch.no_grad():
-                binding_score = self._model.predict(tf_sequence, dna_sequence)
-            
-            return TFBindingResult(
-                tf_name=tf_sequence[:20],
-                dna_region=dna_sequence[:20],
-                binding_score=binding_score,
-                confidence=0.85,
-                position_scores=[binding_score] * 10
-            )
-        except Exception as e:
-            logger.warning(f"Binding prediction failed: {e}")
-            return None
+        # Real mode not implemented - raise error
+        raise NotImplementedError(
+            "Real TFBindFormer inference is not implemented in this prototype. "
+            "This requires ESM-2 + Foldseek model weights. Use mode='mock' for demonstration."
+        )
     
     def discover_targets(self, disease: str, target_genes: List[str]) -> List[TFTarget]:
         """
@@ -219,7 +228,7 @@ class TFBindFormerIntegration:
                     gene_name=gene,
                     tf_family=tf_info["family"],
                     binding_sites=tf_info["binding_sites"],
-                    expression_level=0.6 + np.random.random() * 0.3,
+                    expression_level=stable_score(f"expr:{disease}:{gene}", 0.60, 0.90),
                     disease_relevance=tf_info["disease_relevance"],
                     druggability=druggability
                 )

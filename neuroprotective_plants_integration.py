@@ -52,12 +52,16 @@ class NeuroprotectiveCompound:
     name: str
     source_plant: str
     smiles: str = ""
+    smiles_status: str = "verified"  # "verified" or "hypothetical"
     admet_score: float = 0.0
     docking_score: float = 0.0
     toxicity: str = "Unknown"
     bbb_permeability: str = "Unknown"  # Blood-brain barrier
     targets: List[str] = None
     pathway_scores: Dict[str, float] = None
+    evidence_type: str = "curated_literature"  # Provenance
+    data_mode: str = "heuristic"  # Provenance: heuristic vs real
+    source_reference: str = "Kim et al. 2026"  # Provenance
     
     def __post_init__(self):
         if self.targets is None:
@@ -71,12 +75,17 @@ class NeuroprotectiveCompound:
             "name": self.name,
             "source_plant": self.source_plant,
             "smiles": self.smiles,
+            "smiles_status": self.smiles_status,
             "admet_score": self.admet_score,
             "docking_score": self.docking_score,
             "toxicity": self.toxicity,
             "bbb_permeability": self.bbb_permeability,
             "targets": self.targets,
-            "pathway_scores": self.pathway_scores
+            "pathway_scores": self.pathway_scores,
+            # Provenance fields
+            "evidence_type": self.evidence_type,
+            "data_mode": self.data_mode,
+            "source_reference": self.source_reference
         }
 
 
@@ -113,14 +122,15 @@ AD_TARGETS = {
 NEUROPROTECTIVE_COMPOUNDS = {
     "rosmariquinone": {
         "source": "Rosmarinus officinalis (Rosemary)",
-        "smiles": "CC(=O)Oc1ccc(C2CCC3C2CCC3C)c(C)c1",  # Hypothetical
+        "smiles": "CC(=O)Oc1ccc(C2CCC3C2CCC3C)c(C)c1",  # Hypothetical - not verified
+        "smiles_status": "hypothetical",  # Mark as unverified SMILES
         "admet_score": 0.85,
         "docking_score": -9.2,  # Strong binding to GSK3β
         "toxicity": "Low",
         "bbb": "High",
         "targets": ["GSK3β", "STAT3", "PTGS2"]
     },
-    " curcumin": {
+    "curcumin": {
         "source": "Curcuma longa (Turmeric)",
         "smiles": "CC(=C)Cc1ccc(C=C(C)=O)cc1OC",
         "admet_score": 0.75,
@@ -221,6 +231,7 @@ class NeuroprotectivePlantIntegrator:
                 name=name,
                 source_plant=info["source"],
                 smiles=info.get("smiles", ""),
+                smiles_status=info.get("smiles_status", "verified"),
                 admet_score=info.get("admet_score", 0.0),
                 docking_score=info.get("docking_score", 0.0),
                 toxicity=info.get("toxicity", "Unknown"),
