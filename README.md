@@ -11,8 +11,8 @@ This is a research prototype for demonstration purposes. NOT production ready.
 
 | Module | Status | Description |
 |--------|--------|-------------|
-| Latent Diffusion Model | Mock Only | Hash-based demo scoring |
-| TFBindFormer Integration | Partial | Random values, real model missing |
+| Latent Diffusion Model | Mock Only | Stable hash-based demo scoring |
+| TFBindFormer Integration | Mock Only | Seeded random, real model missing |
 | Neuroprotective Plants | Heuristic | Curated knowledge base (8 compounds) |
 | Full Pipeline | Experimental Orchestrator | Available with mock orchestration |
 | Database Integration | Not Working | API keys required |
@@ -20,10 +20,14 @@ This is a research prototype for demonstration purposes. NOT production ready.
 ## Usage (Experimental Demo Only)
 
 ```bash
-# Mock mode demonstration
-python3 latent_diffusion_integration.py -d alzheimer -o test_results/
+# Run the experimental orchestrator in mock mode
+python3 arp_v21_orchestrator.py --disease alzheimer --mode mock --output demo_results/
 
-# Neuroprotective plants demo
+# Reproducible mock run with seed
+python3 arp_v21_orchestrator.py --disease masld --mode mock --seed 42 --output test_results/
+
+# Individual module demos
+python3 latent_diffusion_integration.py -d alzheimer -o test_results/
 python3 neuroprotective_plants_integration.py -d alzheimer -o test_results/
 
 # Note: This is a research prototype. Results are not validated.
@@ -34,14 +38,17 @@ python3 neuroprotective_plants_integration.py -d alzheimer -o test_results/
 
 | Metric | Status |
 |--------|--------|
-| AutoRun (x50) | Not tested - mock implementation |
-| Novelty Scores | Mock - hash-based |
-| TF Binding Accuracy | Partial - random values |
+| AutoRun (x50) | Mock - not benchmarked |
+| Novelty Scores | Mock heuristic - not scientifically validated |
+| TF Binding Accuracy | Mock/random heuristic - not benchmarked |
 | Linco Coverage | 51K+ profiles (external dependency) |
 | ADMET Integration | Requires API keys |
 
-⚠️ **WARNING**: All performance metrics are from mock implementations.
-Real benchmarks require model APIs and database connections.
+## Reproducibility
+
+⚠️ **Note**: `--seed` improves reproducibility for mock modules, but deterministic 
+behavior is not yet guaranteed across all components. Some numpy operations may 
+still have environment-dependent behavior.
 
 ## Integration Checklist
 
@@ -59,7 +66,7 @@ Real benchmarks require model APIs and database connections.
 
 1. Kim & Yoo (2026) - Latent Diffusion for Drug-Induced Gene Expression
    - Note: DOI placeholder - actual implementation not connected
-   
+
 2. Kim et al. (2026) - Neuroprotective Medicinal Plants
    - Note: Curated knowledge base, real screening pending
 

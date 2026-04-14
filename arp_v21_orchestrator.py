@@ -54,6 +54,18 @@ def create_deterministic_seed(seed=None):
     # Create seed from current time + process info for pseudo-randomness
     return int(hashlib.sha256(f"{datetime.now()}{os.getpid()}".encode()).hexdigest()[:8], 16)
 
+def apply_seed(seed: int | None):
+    """Apply seed to all random number generators for reproducibility"""
+    if seed is None:
+        return
+    import random
+    random.seed(seed)
+    try:
+        import numpy as np
+        np.random.seed(seed)
+    except Exception:
+        pass
+
 def run_latent_diffusion(disease, mode="mock", seed=None):
     """Run latent diffusion module"""
     print(f"🔬 Running Latent Diffusion Module...")
@@ -80,12 +92,8 @@ def run_latent_diffusion(disease, mode="mock", seed=None):
         
         targets = disease_targets.get(disease, ["GSK3β", "NFKB1"])
         
-        # Use deterministic seed
-        if seed:
-            import random
-            random.seed(seed)
-            import numpy as np
-            np.random.seed(seed)
+        # Apply seed for reproducibility
+        apply_seed(seed)
         
         result = integrator.evaluate_drug_relevance(
             "CC(=O)Oc1ccc(C2CCC3C2CCC3C)c(C)c1",  # Embelin
@@ -162,10 +170,8 @@ def run_tfbindformer(mode="mock", seed=None):
         
         integrator = TFBindFormerIntegration(mode="mock")
         
-        # Use deterministic seed
-        if seed:
-            import random
-            random.seed(seed)
+        # Apply seed for reproducibility
+        apply_seed(seed)
         
         # Mock DNA sequence
         dna_sequence = "ATGCGATCGATCGATCGATCGATCGATCGATCG"
@@ -173,7 +179,7 @@ def run_tfbindformer(mode="mock", seed=None):
         result = integrator.predict_binding(
             "CC(=O)Oc1ccc(C2CCC3C2CCC3C)c(C)c1",  # Embelin
             dna_sequence,
-            seed=args.seed  # Pass seed to the method
+            seed=seed  # Pass seed to the method
         )
         
         if result:
@@ -250,7 +256,13 @@ def main():
         "enabled_modules": modules_to_run,
         "available_modules": list(MODULES_AVAILABLE.keys()),
         "missing_modules": list(MODULE_IMPORT_ERRORS.keys()),
-        "status": "experimental_prototype"
+        "status": "experimental_prototype",
+        "reproducibility": {
+            "seed_provided": args.seed is not None,
+            "numpy_seeded": args.seed is not None,
+            "fully_deterministic": False,
+            "note": "Deterministic behavior not guaranteed across all components"
+        }
     }
     
     for module_name in modules_to_run:

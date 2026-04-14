@@ -1,28 +1,40 @@
 """
-Latent Diffusion Model for Drug-Induced Transcriptional Response
 ================================================================
+MOCK IMPLEMENTATION - NO ACTUAL DIFFUSION INFERENCE PERFORMED
+================================================================
+
+⚠️  WARNING: This module is a MOCK implementation for demonstration purposes.
+    No actual Latent Diffusion Model inference is performed.
+    Scores are deterministic heuristics using SHA256-based stable scoring.
+
+    DO NOT use these results for actual research or clinical decisions.
+    This is a research prototype only.
 
 Integration of Kim & Yoo (2026) - Latent Diffusion Model for predicting
 condition-aware drug-induced transcriptional responses.
 
-Reference: 
+Reference:
 - Title: "Predicting Condition-Aware Drug-Induced Transcriptional Responses via a Latent Diffusion Model"
 - Authors: Chaewon Kim, Sunyong Yoo (Chonnam National University, MATILO AI Inc.)
 - Journal: Bioinformatics
-- DOI: https://doi.org/10.1093/bioinformatics/xxxxx
-- Code: https://doi.org/10.5281/zenodo.18871024
+- DOI: https://doi.org/10.1093/bioinformatics/xxxxx (PLACEHOLDER - NOT REAL)
+- Code: https://doi.org/10.5281/zenodo.18871024 (PLACEHOLDER - NOT REAL)
 
-Key Features:
+Key Features (CLAIMED - not implemented):
 - VAE + Diffusion model combination
 - Latent space representation for efficiency
 - Mean + Variance prediction (vs PertDiT mean-only)
 - LINCS L1000 dataset
-- Performance: Pearson 0.870, R² 0.739
+- Performance: Pearson 0.870, R² 0.739 (from paper, not verified)
 
 Integration with ARP v20:
 - Enhances perturbation biology module
 - Gene expression prediction for drug candidates
 - Uncertainty quantification via variance prediction
+
+================================================================
+MOCK IMPLEMENTATION - ACTUAL SCORING IS DETERMINISTIC HEURISTIC
+================================================================
 """
 
 import os
@@ -37,12 +49,16 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
-def _stable_hash(text: str, seed: int = 42) -> int:
-    """Generate stable hash for reproducible mock scoring"""
-    # Use SHA256 for deterministic hash
-    hash_obj = hashlib.sha256(f"{text}_{seed}".encode())
-    # Convert to integer in range 0-9999 for scoring
-    return int(hash_obj.hexdigest()[:8], 16) % 10000
+def stable_score(key: str, min_val: float, max_val: float) -> float:
+    """
+    Generate stable deterministic score in range [min_val, max_val)
+    
+    Uses SHA256 for environment-independent deterministic output.
+    """
+    digest = hashlib.sha256(key.encode("utf-8")).hexdigest()
+    # Normalize to [0, 1) range
+    value = int(digest[:8], 16) / 0xFFFFFFFF
+    return min_val + (max_val - min_val) * value
 
 
 @dataclass
@@ -158,7 +174,7 @@ class LatentDiffusionIntegrator:
         # For production, replace with actual Latent Diffusion Model
         # Current implementation uses hash-based scoring for demonstration
         # Real model should use VAE + Diffusion architecture with actual gene expression data
-        base_score = 0.7 + _stable_hash(drug_smiles, seed) % 30 / 100
+        base_score = stable_score(f"mean:{drug_smiles}", 0.70, 0.99)
         
         profile = GeneExpressionProfile(
             drug_id=drug_smiles[:20] if len(drug_smiles) > 20 else drug_smiles,
@@ -166,7 +182,7 @@ class LatentDiffusionIntegrator:
             dose=dose,
             time=time,
             mean_prediction=base_score,
-            variance_prediction=0.05 + (_stable_hash(drug_smiles + cell_line, seed) % 10) / 100,
+            variance_prediction=stable_score(f"var:{drug_smiles}:{cell_line}", 0.05, 0.14),
             metadata={
                 "model": "Latent Diffusion Model (Kim & Yoo 2026)",
                 "architecture": "VAE + Diffusion in latent space",
@@ -220,7 +236,7 @@ class LatentDiffusionIntegrator:
             # NOTE: MOCK PATHWAY SCORING
             # For production, replace with actual pathway analysis (GSEA, Enrichr, etc.)
             # Current implementation uses hash-based scoring for demonstration
-            base_relevance = 0.5 + _stable_hash(pathway + drug_smiles, seed) % 50 / 100
+            base_relevance = stable_score(f"pathway:{pathway}:{drug_smiles}", 0.50, 0.99)
             pathway_scores[pathway] = {
                 "score": base_relevance,
                 "direction": "activation" if base_relevance > 0.7 else "inhibition",
@@ -242,10 +258,20 @@ class LatentDiffusionIntegrator:
         
         report = f"""# Latent Diffusion Model Analysis Report
 
-**Model**: Kim & Yoo (2026) - Condition-Aware Drug-Induced Transcriptional Responses
-**Source**: Bioinformatics, DOI: 10.1093/bioinformatics/xxxxx
+⚠️  **MOCK IMPLEMENTATION WARNING** ⚠️
 
-## Performance Benchmarks
+This report was generated from a **mock implementation**.
+No real Latent Diffusion Model inference was performed.
+Scores are deterministic heuristics using SHA256-based stable scoring.
+
+**DO NOT use these results for actual research or clinical decisions.**
+
+---
+
+**Model**: Kim & Yoo (2026) - Condition-Aware Drug-Induced Transcriptional Responses
+**Source**: Bioinformatics, DOI: 10.1093/bioinformatics/xxxxx (PLACEHOLDER)
+
+## Performance Benchmarks (from paper, NOT verified in this implementation)
 
 | Metric | Score |
 |--------|-------|
