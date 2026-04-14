@@ -114,7 +114,7 @@ def run_latent_diffusion(disease, mode="mock", seed=None):
             "mode": "mock",
             "targets": targets,
             "confidence": result["model_confidence"],
-            "source_of_score": "hash-based heuristic",
+            "source_of_score": "stable deterministic heuristic",
             "warning": "Mock implementation - results not scientifically valid"
         }
     
