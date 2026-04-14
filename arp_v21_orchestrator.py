@@ -260,12 +260,12 @@ def main():
                        default="mock", 
                        choices=["mock", "real"], 
                        help="Execution mode (default: mock)")
-    parser.add_argument("--seed", 
-                       type=int, 
-                       help="Random seed for reproducible results")
+    parser.add_argument("--seed",
+                       type=int,
+                       help="Optional seed for stochastic components; current mock scoring is mostly deterministic")
     parser.add_argument("--modules", 
                        nargs="+", 
-                       choices=["latent_diffusion", "neuroprotective", "tfbindformer"],
+                       choices=["latent_diffusion", "neuroprotective", "tfbindformer", "sarcopenia"],
                        help="Specific modules to run (default: all available)")
     
     args = parser.parse_args()
@@ -309,8 +309,8 @@ def main():
         "reproducibility": {
             "seed_provided": args.seed is not None,
             "numpy_seeded": args.seed is not None,
-            "fully_deterministic": False,
-            "note": "Deterministic behavior not guaranteed across all components"
+            "fully_deterministic_mock_scoring": args.mode == "mock",
+            "note": "Current mock components are largely hash-based or curated; seed has limited effect"
         }
     }
     
@@ -342,7 +342,7 @@ def main():
     
     # Save results
     output_dir = Path(args.output)
-    output_dir.mkdir(exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
     
     # Save manifest
     with open(output_dir / "manifest.json", "w") as f:

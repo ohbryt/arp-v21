@@ -102,7 +102,7 @@ class TFBindFormerIntegration:
         self._model = None
         
         if self.is_mock:
-            print("🎭 WARNING: Running in MOCK MODE - using random values")
+            print("🎭 WARNING: Running in MOCK MODE - using deterministic heuristic scoring")
             print("   Real TFBindFormer model not available")
         else:
             print("🚫 Real mode not implemented yet")

@@ -321,7 +321,8 @@ The Latent Diffusion Model combines:
 def integrate_latent_diffusion(
     disease: str,
     target_genes: List[str],
-    drugs: List[str] = None
+    drugs: List[str] = None,
+    output_dir: str = "diffusion_results",
 ) -> List[Dict[str, Any]]:
     """
     Main integration function for ARP v20
@@ -330,11 +331,12 @@ def integrate_latent_diffusion(
         disease: Disease name
         target_genes: List of target gene names
         drugs: Optional list of drug SMILES
+        output_dir: Output directory for results
     
     Returns:
         List of pathway relevance scores
     """
-    integrator = LatentDiffusionIntegrator()
+    integrator = LatentDiffusionIntegrator(output_dir=output_dir)
     
     # Default drugs if not provided
     if drugs is None:
@@ -375,7 +377,7 @@ if __name__ == "__main__":
     # Get default pathways for disease
     pathways = DISEASE_PATHWAYS.get(args.disease.lower(), ["GSK3β", "MTOR", "NFKB1"])
     
-    results = integrate_latent_diffusion(args.disease, pathways)
+    results = integrate_latent_diffusion(args.disease, pathways, output_dir=args.output)
     
     print(f"\nLatent Diffusion Model Analysis for {args.disease}")
     print(f"Pathways: {pathways}")

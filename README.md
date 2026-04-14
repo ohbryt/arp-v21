@@ -46,9 +46,7 @@ python3 neuroprotective_plants_integration.py -d alzheimer -o test_results/
 
 ## Reproducibility
 
-⚠️ **Note**: `--seed` improves reproducibility for mock modules, but deterministic 
-behavior is not yet guaranteed across all components. Some numpy operations may 
-still have environment-dependent behavior.
+⚠️ **Note**: current mock modules are mostly deterministic already (hash-based or curated). --seed is retained mainly for future stochastic components.
 
 ## Integration Checklist
 

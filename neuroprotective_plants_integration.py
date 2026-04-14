@@ -409,17 +409,21 @@ multi_target = integrator.analyze_multi_target(["GSK3β", "STAT3"])
         return str(report_path)
 
 
-def integrate_neuroprotective(disease: str = "alzheimer") -> Dict[str, Any]:
+def integrate_neuroprotective(
+    disease: str = "alzheimer",
+    output_dir: str = "neuroprotective_results",
+) -> Dict[str, Any]:
     """
     Main integration function for ARP v20
     
     Args:
         disease: Disease name (default: alzheimer)
+        output_dir: Output directory for results
     
     Returns:
         Dictionary with analysis results
     """
-    integrator = NeuroprotectivePlantIntegrator()
+    integrator = NeuroprotectivePlantIntegrator(output_dir=output_dir)
     
     # Get all targets
     targets = integrator.get_targets()
@@ -456,7 +460,7 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    results = integrate_neuroprotective(args.disease)
+    results = integrate_neuroprotective(args.disease, output_dir=args.output)
     
     print(f"\nNeuroprotective Plants Analysis for {args.disease}")
     print(f"Targets: {len(results['targets'])}")
