@@ -47,6 +47,12 @@ try:
 except ImportError as e:
     MODULE_IMPORT_ERRORS['tfbindformer'] = str(e)
 
+try:
+    from sarcopenia_module import SarcopeniaModule
+    MODULES_AVAILABLE['sarcopenia'] = SarcopeniaModule
+except ImportError as e:
+    MODULE_IMPORT_ERRORS['sarcopenia'] = str(e)
+
 def create_deterministic_seed(seed=None):
     """Create deterministic seed for reproducible results"""
     if seed is not None:
@@ -195,6 +201,49 @@ def run_tfbindformer(mode="mock", seed=None):
     
     return {"error": "Real mode not implemented"}
 
+def run_sarcopenia(disease, mode="mock", seed=None):
+    """Run Sarcopenia module"""
+    print(f"💪 Running Sarcopenia Module...")
+    
+    if mode == "real":
+        raise NotImplementedError(
+            "Real mode not implemented for Sarcopenia module. "
+            "Use mode='mock' for demonstration."
+        )
+    
+    if mode == "mock":
+        print("  🎭 WARNING: Running in MOCK MODE - using deterministic heuristic scoring")
+        print("  ℹ️  Scores are deterministic in mock mode; --seed retained for future compatibility")
+        
+        integrator = SarcopeniaModule()
+        
+        # Screen compounds
+        compounds = integrator.screen_compounds()
+        
+        # Get top candidates
+        top_candidates = [
+            {
+                "name": c.name,
+                "type": c.compound_type,
+                "targets": c.targets,
+                "overall_score": c.overall_score,
+                "admet_score": c.admet_score,
+                "clinical_evidence": c.clinical_evidence,
+                "warning": c.warning,
+            }
+            for c in compounds[:5]
+        ]
+        
+        return {
+            "module": "sarcopenia",
+            "disease": disease,
+            "mode": "mock",
+            "top_candidates": top_candidates,
+            "total_candidates": len(compounds),
+            "source_of_scores": "deterministic heuristic",
+            "warning": "Mock implementation - results not scientifically validated"
+        }
+
 def main():
     parser = argparse.ArgumentParser(
         description="ARP v21 - Research Prototype Orchestrator",
@@ -284,6 +333,8 @@ def main():
                 )
             elif module_name == "tfbindformer":
                 results[module_name] = run_tfbindformer(args.mode, args.seed)
+            elif module_name == "sarcopenia":
+                results[module_name] = run_sarcopenia(args.disease, args.mode, args.seed)
                 
         except Exception as e:
             print(f"❌ Error in {module_name}: {e}")
